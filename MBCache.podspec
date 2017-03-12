@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MBCache'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'An image extension for persistence caching (along with animations for presenting the image)'
 
   s.description      = 'A UIImage extension that takes care of downloading and caching an image, allowing the user to supply a placeholder image while the image downloads.'

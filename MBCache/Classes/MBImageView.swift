@@ -17,7 +17,13 @@ public enum MBImageAnimationType {
 }
 
 open class MBImageView: UIView {
-    var imageView: UIImageView!
+    var imageView: UIImageView! {
+        didSet {
+            self.imageView.clipsToBounds = true
+            self.imageView.alpha = 0.0
+        }
+    }
+    
     open var MBContentMode: UIViewContentMode? {
         didSet {
             if let imageView = imageView {
