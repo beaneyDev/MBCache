@@ -9,17 +9,9 @@
 Pod::Spec.new do |s|
   s.name             = 'MBCache'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of MBCache.'
+  s.summary          = 'An image extension for persistence caching (along with animations for presenting the image)'
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  s.description      = 'A UIImage extension that takes care of downloading and caching an image, allowing the user to supply a placeholder image while the image downloads.'
 
   s.homepage         = 'https://github.com/beaney1232/MBCache'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -39,4 +31,7 @@ TODO: Add long description of the pod here.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
+
+    s.dependency 'CryptoSwift'
+    s.dependency 'MBUtils'
 end
