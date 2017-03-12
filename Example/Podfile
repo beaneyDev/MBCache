@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MBCache_Example' do
+  pod 'MBCache', :path => '../'
+
+  target 'MBCache_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
