@@ -8,6 +8,7 @@
 
 import UIKit
 import MBCache
+import MBUtils
 
 class ViewController: UIViewController {
 
@@ -16,8 +17,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        imageView.configureWithURL(url: "http://the-media-image.com/wp-content/uploads/2016/02/google-logo.jpg", with: .pop)
-        imageView.MBContentMode = UIViewContentMode.scaleAspectFit
+        MBOn.delay(0.1) { 
+            self.imageView.layer.borderColor = UIColor.lightGray.cgColor
+            self.imageView.layer.borderWidth = 0.5
+            self.imageView.layer.cornerRadius = self.imageView.frame.size.width / 2.0
+            self.imageView.configureWithURL(url: "http://the-media-image.com/wp-content/uploads/2016/02/google-logo.jpg", with: .pop, defaultImage: nil)
+            self.imageView.MBContentMode = UIViewContentMode.scaleAspectFill
+        }
     }
 
     override func didReceiveMemoryWarning() {

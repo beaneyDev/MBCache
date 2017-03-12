@@ -16,11 +16,13 @@ public enum MBImageAnimationType {
     case none
 }
 
+public typealias ImageCompletion = () -> ()
+
 open class MBImageView: UIView {
+    //MARK: PROPERTIES
     var imageView: UIImageView! {
         didSet {
-            self.imageView.clipsToBounds = true
-            self.imageView.alpha = 0.0
+            self.clipsToBounds = true
         }
     }
     
@@ -32,6 +34,7 @@ open class MBImageView: UIView {
         }
     }
     
+    //MARK: Initial layout.
     func configureImageView(defaultImage: UIImage? = nil) {
         if imageView != nil {
             return
@@ -47,7 +50,8 @@ open class MBImageView: UIView {
         self.addConstraints(vertical)
     }
     
-    open func configureWithURL(url: String, with animation: MBImageAnimationType, defaultImage: UIImage? = nil) {
+    //MARK: Image assignments
+    open func configureWithURL(url: String, with animation: MBImageAnimationType, defaultImage: UIImage? = nil, completion: ImageCompletion? = nil) {
         configureImageView(defaultImage: defaultImage)
         
         guard let url: URL = URL(string: url) else {
@@ -58,7 +62,7 @@ open class MBImageView: UIView {
         
         //Check to see if there's a cache.
         if let cachedImage = MBCacheController.shared.cachedResourceForRequest(request), let image = UIImage(data: cachedImage) {
-            configureWithImage(image: image, animation: animation)
+            configureWithImage(image: image, animation: animation, completion: completion)
             return
         }
         
@@ -66,45 +70,58 @@ open class MBImageView: UIView {
         let session = URLSession(configuration: .default)
         let dataTask = session.dataTask(with: url) { (data, response, error) in
             guard let data = data, let image = UIImage(data: data) else {
-                self.configureWithImage(image: defaultImage, animation: animation)
+                self.configureWithImage(image: defaultImage, animation: animation, completion: completion)
                 return
             }
             
             //Download successful, cache the data and apply the image.
             MBCacheController.shared.writeCacheResourceToPersistentCache(data, request: request)
-            self.configureWithImage(image: image, animation: animation)
+            self.configureWithImage(image: image, animation: animation, completion: completion)
         }
         dataTask.resume()
     }
     
-    open func configureWithImage(image: UIImage?, animation: MBImageAnimationType) {
+    open func configureWithImage(image: UIImage?, animation: MBImageAnimationType, completion: ImageCompletion? = nil) {
         MBOn.main {
-            self.imageView.alpha = 0.0
+            self.alpha = 0.0
             self.imageView.image = image
             
             switch animation {
             case .none :
-                self.imageView.alpha = 1.0
+                self.alpha = 1.0
                 break
             case .fade :
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.imageView.alpha = 1.0
-                })
+                self.fadeAnimation(completion: completion)
                 break
             case .pop :
-                self.imageView.alpha = 1.0
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.imageView.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
-                }, completion: { (finished) in
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self.imageView.transform = CGAffineTransform.identity
-                    })
-                })
+                self.popAnimation(completion: completion)
                 break
             default:
                 self.imageView.alpha = 1.0
                 break
             }
         }
+    }
+    
+    //MARK: Image animations
+    func fadeAnimation(completion: ImageCompletion? = nil) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.alpha = 1.0
+        }, completion: { (finished) in
+            completion?()
+        })
+    }
+    
+    func popAnimation(completion: ImageCompletion? = nil) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.alpha = 1.0
+            self.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+        }, completion: { (finished) in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.transform = CGAffineTransform.identity
+            }, completion: { (finished) in
+                completion?()
+            })
+        })
     }
 }
