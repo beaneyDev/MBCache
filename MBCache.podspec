@@ -13,11 +13,11 @@ Pod::Spec.new do |s|
 
   s.description      = 'A UIImage extension that takes care of downloading and caching an image, allowing the user to supply a placeholder image while the image downloads.'
 
-  s.homepage         = 'https://github.com/beaney1232/MBCache'
+  s.homepage         = 'https://github.com/beaneyDev/MBCache'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'beaney1232' => 'matt.beaney@pagesuite.co.uk' }
-  s.source           = { :git => 'https://github.com/beaney1232/MBCache.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/beaneyDev/MBCache.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
